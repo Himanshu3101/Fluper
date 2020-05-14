@@ -26,13 +26,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
-    private List<ProductFields_Note> productFields_notes;
-    private Activity activity;
-
-    public NoteAdapter(ShowProduct showProduct, List<ProductFields_Note> productFields_notes) {
-        this.activity = showProduct;
-        this.productFields_notes = productFields_notes;
-    }
+    private List<ProductFields_Note> productFields_notes  = new ArrayList<>();
 
     @NonNull
     @Override
@@ -42,18 +36,16 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
         return new NoteHolder(itemView);
     }
 
-    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull NoteHolder holder, int position) {
-        final NoteHolder itemViewHolder = (NoteHolder) holder;
-
-            holder.name.setText(productFields_notes.get(position).getName());
-            holder.description.setText(productFields_notes.get(position).getDescription());
-            holder.stores.setText(productFields_notes.get(position).getStores());
-            holder.regularPrice.setText(Integer.toString(productFields_notes.get(position).getRegularPrice()));
-            holder.salePrice.setText(Integer.toString(productFields_notes.get(position).getSalePrice()));
-            holder.product_Image.setImageBitmap(convertToBitmap(productFields_notes.get(position).getProductPhoto()));
-            String[] colorList = productFields_notes.get(position).getColors().split(",");
+        ProductFields_Note fields_note = productFields_notes.get(position);
+            holder.name.setText(fields_note.getName());
+            holder.description.setText(fields_note.getDescription());
+            holder.stores.setText(fields_note.getStores());
+            holder.regularPrice.setText(Integer.toString(fields_note.getRegularPrice()));
+            holder.salePrice.setText(Integer.toString(fields_note.getSalePrice()));
+            holder.product_Image.setImageBitmap(convertToBitmap(fields_note.getProductPhoto()));
+            String[] colorList = fields_note.getColors().split(",");
             for (int i = 0; i <= colorList.length - 1; i++) {
                 LinearLayoutCompat.LayoutParams vp = new LinearLayoutCompat.LayoutParams(30, 30);
                 vp.setMarginStart(10);
@@ -66,32 +58,6 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
                 image.setMinimumWidth(20);
                 image.setBackgroundColor(Integer.parseInt(colorList[i]));
             }
-
-            holder.fullLayout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int position = itemViewHolder.getAdapterPosition();
-                    int id =  productFields_notes.get(position).getId();
-                    String name = productFields_notes.get(position).getName();
-                    String description =productFields_notes.get(position).getDescription();
-                    String stores =productFields_notes.get(position).getStores();
-                    Integer regPrice =productFields_notes.get(position).getRegularPrice();
-                    Integer salePrice =productFields_notes.get(position).getSalePrice();
-                    byte[] productImage = productFields_notes.get(position).getProductPhoto();
-                    String colors = productFields_notes.get(position).getColors();
-
-                    Intent intent = new Intent(activity,Form.class);
-                    intent.putExtra("ID", id);
-                    intent.putExtra("name", name);
-                    intent.putExtra("description", description);
-                    intent.putExtra("stores", stores);
-                    intent.putExtra("regPrice", regPrice);
-                    intent.putExtra("salePrice", salePrice);
-                    intent.putExtra("productImage", productImage);
-                    intent.putExtra("colors", colors);
-                    activity.startActivity(intent);
-                }
-            });
     }
 
     @Override
@@ -99,11 +65,17 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
         return productFields_notes.size();
     }
 
+    public void setProductFields_notes(List<ProductFields_Note> productFields_notes) {
+        this.productFields_notes = productFields_notes;
+        notifyDataSetChanged();
+    }
+
     public ProductFields_Note getDataAt(int position){
         return productFields_notes.get(position);
     }
 
     private Bitmap convertToBitmap(byte[] b){
+        if (b == null) return null;
         return BitmapFactory.decodeByteArray(b, 0, b.length);
     }
 
@@ -113,7 +85,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
         private LinearLayoutCompat colorLayout;
         private LinearLayout fullLayout;
 
-        public NoteHolder(@NonNull View itemView) {
+        public NoteHolder(@NonNull final View itemView) {
             super(itemView);
             product_Image = itemView.findViewById(R.id.product_Image);
             name = itemView.findViewById(R.id.name);
@@ -123,6 +95,44 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
             salePrice = itemView.findViewById(R.id.salePrice);
             colorLayout = itemView.findViewById(R.id.colorLayout);
             fullLayout = itemView.findViewById(R.id.fullLayout);
+
+            fullLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int id =  productFields_notes.get(getAdapterPosition()).getId();
+                    String name = productFields_notes.get(getAdapterPosition()).getName();
+                    String description = productFields_notes.get(getAdapterPosition()).getDescription();
+                    String stores = productFields_notes.get(getAdapterPosition()).getStores();
+                    Integer regPrice = productFields_notes.get(getAdapterPosition()).getRegularPrice();
+                    Integer salePrice = productFields_notes.get(getAdapterPosition()).getSalePrice();
+                    byte[] productImage = productFields_notes.get(getAdapterPosition()).getProductPhoto();
+                    String colors = productFields_notes.get(getAdapterPosition()).getColors();
+
+                    Intent intent = new Intent(itemView.getContext(),Form.class);
+                    intent.putExtra("ID", id);
+                    intent.putExtra("name", name);
+                    intent.putExtra("description", description);
+                    intent.putExtra("stores", stores);
+                    intent.putExtra("regPrice", regPrice);
+                    intent.putExtra("salePrice", salePrice);
+                    intent.putExtra("productImage", productImage);
+                    intent.putExtra("colors", colors);
+                    itemView.getContext().startActivity(intent);
+                }
+            });
+
+            product_Image.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (convertToBitmap(productFields_notes.get(getAdapterPosition()).getProductPhoto()) != null) {
+                        ShowProduct.imagePreviewLayout.setVisibility(View.VISIBLE);
+                        ShowProduct.imagePreview.setImageBitmap(convertToBitmap(productFields_notes
+                                .get(getAdapterPosition()).getProductPhoto()));
+                    }
+                }
+            });
+
+
         }
     }
 }

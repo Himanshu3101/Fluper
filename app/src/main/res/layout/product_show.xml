@@ -21,4 +21,34 @@
         android:visibility="gone"
         android:text="@string/no_data_available" />
 
+    <RelativeLayout
+        android:id="@+id/imagePreviewLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:visibility="gone">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha=".8"
+            android:background="@color/white"
+            android:padding="10dp"/>
+
+        <ImageView
+            android:id="@+id/imageClosePreview"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentEnd="true"
+            android:background="@color/colorPrimary"
+            android:src="@drawable/ic_close" />
+
+        <ImageView
+            android:id="@+id/imagePreview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/imageClosePreview" />
+
+    </RelativeLayout>
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

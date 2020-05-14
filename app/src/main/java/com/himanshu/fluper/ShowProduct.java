@@ -27,6 +27,10 @@ public class ShowProduct extends AppCompatActivity {
     private TextView emptyView;
     RecyclerView recyclerView;
     NoteAdapter adapter;
+    public static ImageView imagePreview;
+    ImageView imageClosePreview;
+    public static RelativeLayout imagePreviewLayout;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +40,20 @@ public class ShowProduct extends AppCompatActivity {
         recyclerView = findViewById(R.id.recycler_view);
         emptyView = findViewById(R.id.empty_view);
 
+        imagePreview = findViewById(R.id.imagePreview);
+        imageClosePreview = findViewById(R.id.imageClosePreview);
+        imagePreviewLayout = findViewById(R.id.imagePreviewLayout);
+        imageClosePreview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                imagePreviewLayout.setVisibility(View.GONE);
+            }
+        });
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setHasFixedSize(true);
+        final NoteAdapter adapter = new NoteAdapter();
+        recyclerView.setAdapter(adapter);
         viewModel = new ViewModelProvider(this).get(ProductFieldsNoteViewModel.class);
         viewModel.getListLiveData().observe(this, new Observer<List<ProductFields_Note>>() {
             @Override
@@ -46,9 +64,7 @@ public class ShowProduct extends AppCompatActivity {
                 }else{
                     recyclerView.setVisibility(View.VISIBLE);
                     emptyView.setVisibility(View.GONE);
-                    recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-                    adapter = new NoteAdapter(ShowProduct.this,productFields_notes);
-                    recyclerView.setAdapter(adapter);
+                    adapter.setProductFields_notes(productFields_notes);
                 }
             }
         });
