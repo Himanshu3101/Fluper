@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Fluper</string>
+    <string name="createProduct">Create Product</string>
+    <string name="showProduct">Show Product</string>
+    <string name="add_color">Add Color</string>
+    <string name="submit">Submit</string>
+    <string name="regular_price">Regular price</string>
+    <string name="sales_price">Sales price</string>
+    <string name="store">Store</string>
+    <string name="name">Name</string>
+    <string name="description">Description</string>
+    <string name="no_data_available">No Data Available</string>
+    <string name="delete">Delete</string>
+    <string name="update">Update</string>
+</resources>
