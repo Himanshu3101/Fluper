@@ -62,6 +62,7 @@ public class ShowProduct extends AppCompatActivity {
                     recyclerView.setVisibility(View.GONE);
                     emptyView.setVisibility(View.VISIBLE);
                 }else{
+                    Toast.makeText(getApplicationContext(), "Swipe Left to delete the single item.", Toast.LENGTH_LONG).show();
                     recyclerView.setVisibility(View.VISIBLE);
                     emptyView.setVisibility(View.GONE);
                     adapter.setProductFields_notes(productFields_notes);

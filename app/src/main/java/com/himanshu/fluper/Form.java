@@ -207,7 +207,7 @@ public class Form extends AppCompatActivity {
 
         try{
             if (pName.trim().isEmpty() || picByteArray == null || pDescription.trim().isEmpty() || pStore.trim().isEmpty() || colorCode.trim().isEmpty() || pRegular == 0 || pSale == 0){
-                Toast.makeText(this, "PLease insert all details & Colors.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Please insert all details & Colors.", Toast.LENGTH_SHORT).show();
             }else{
                 ProductFields_Note fields_note = new ProductFields_Note( pName, pDescription, pRegular, pSale, picByteArray, colorCode, pStore);
                 ProductFieldsNoteViewModel viewModel  = new ViewModelProvider(this).get(ProductFieldsNoteViewModel.class);
